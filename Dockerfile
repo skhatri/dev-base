@@ -29,9 +29,19 @@ RUN apt-get clean
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 
+#Download scala
+RUN wget http://www.scala-lang.org/files/archive/scala-2.10.4.tgz -O /tmp/scala-2.10.4.tgz
+RUN mkdir -p /opt/local/scala && cd /opt/local/scala && tar xzf /tmp/scala-2.10.4.tgz
 
+ENV SCALA_HOME /opt/local/scala/scala-2.10.4
 
-ENV PATH $JAVA_HOME/bin:$GRADLE_HOME/bin:$PATH
+#Download SBT
+RUN wget http://dl.bintray.com/sbt/native-packages/sbt/0.13.5/sbt-0.13.5.zip -O /tmp/sbt-0.13.5.zip
+RUN mkdir -p /opt/local/sbt && cd /opt/local/sbt && unzip /tmp/sbt-0.13.5.zip -d .
 
+ENV SBT_HOME /opt/local/sbt/sbt-0.13.5
 
+ENV PATH $JAVA_HOME/bin:$SCALA_HOME/bin:$SBT_HOME/bin:$GRADLE_HOME/bin:$PATH
+
+RUN rm -rf /tmp/sbt* && rm -rf /tmp/scala*
 
